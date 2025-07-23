@@ -2,10 +2,9 @@
 # ChatGPTの生成したコードで記述
 # お試しcurl: curl -X GET "localhost:9200/_cluster/health?pretty"
 # dashboards: http://localhost:5601
-version: '3'
 services:
   opensearch:
-    build: ./opensearch
+    image: opensearchproject/opensearch:3.1.0
     container_name: opensearch
     environment:
       - discovery.type=single-node
@@ -21,7 +20,7 @@ services:
       - 9600:9600  # モニタリング用
     # https://github.com/opensearch-project/OpenSearch/blob/3e6ee3a6313b390963e99662338f12d7bc5fe7e0/distribution/docker/src/docker/Dockerfile#L126C15-L126C19
   dashboards:
-    image: opensearchproject/opensearch-dashboards:latest
+    image: opensearchproject/opensearch-dashboards:3.1.0
     container_name: opensearch-dashboards
     ports:
       - 5601:5601
@@ -31,8 +30,5 @@ services:
     depends_on:
       - opensearch
 
-
 volumes:
   opensearch-data:
-
-

@@ -1,0 +1,34 @@
+# OpenSearchとOpenSearch DashboardsのDocker Composeファイル
+# ChatGPTの生成したコードで記述
+# お試しcurl: curl -X GET "localhost:9200/_cluster/health?pretty"
+# dashboards: http://localhost:5601
+services:
+  opensearch:
+    build: ./opensearch
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600  # モニタリング用
+    # https://github.com/opensearch-project/OpenSearch/blob/3e6ee3a6313b390963e99662338f12d7bc5fe7e0/distribution/docker/src/docker/Dockerfile#L126C15-L126C19
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:3.1.0
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+    depends_on:
+      - opensearch
+
+volumes:
+  opensearch-data:
