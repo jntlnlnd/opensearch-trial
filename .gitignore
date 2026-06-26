@@ -1,3 +1,5 @@
 .venv
 ndl-data
 esci-data
+__pycache__
+artifacts
